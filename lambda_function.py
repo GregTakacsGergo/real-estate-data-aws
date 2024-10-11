@@ -1,9 +1,10 @@
 from apartment_data_fetcher import ApartmentDataFetcher
 from dynamodb_handler import ApartmentDataDatabase
 import json
+from config import SCRAPING_TARGET 
 
 def lambda_handler():
-    url = "https://ingatlan.jofogas.hu/hajdu-bihar/debrecen/lakas?max_size=60&min_size=50&st=s"
+    url = SCRAPING_TARGET
     data_fetcher = ApartmentDataFetcher(url)
     apartment_data = data_fetcher.get_apartment_data()
     if apartment_data:
