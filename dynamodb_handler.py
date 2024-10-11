@@ -2,7 +2,6 @@ import boto3
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError
 from decimal import Decimal
 
-
 class ApartmentDataDatabase:
     def __init__(self):
         self.dynamodb = boto3.resource('dynamodb')
