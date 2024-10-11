@@ -7,7 +7,7 @@ Before you begin, ensure you have the following software installed on your syste
 - **VS Code** (recommended) https://code.visualstudio.com/
 - **Python** (version 3.12.6) https://www.python.org/downloads/release/python-3116/
 - **Git** https://git-scm.com/downloads/
-- **AWS account**(if you don't have one, you can create a free account) with access to S3 bucket and IAM user with access to S3 bucket. https://aws.amazon.com/free/
+- **AWS account** if you don't already have one, you can create a free account with access to S3 bucket and IAM user with access to S3 bucket. https://aws.amazon.com/free/
 
 ### **Step 1: Clone the Repository**
 
@@ -23,7 +23,7 @@ git clone https://github.com/GregTakacsGergo/real-estate-data-aws.git
 python3.12 -m venv .yourvenv
 .yourvenv\Scripts\activate
 ```
-put *.yourvenv* in the .gitignore !
+place *.yourvenv* in the .gitignore !
 
 ### **Step 3: Install dependencies**
 
@@ -54,9 +54,34 @@ If the command returns a list of your S3 buckets, you have successfully configur
 ### **Step 5: Set up an S3 bucket**
 
 1. Create an S3 bucket in the AWS Management Console.
-2. Download *realestate_env*.zip from the repository and upload it to your S3 bucket.
+2. Download *realestate_env.zip* (containing all the resources required for the project)from the repository and upload it to your S3 bucket.
 
 ### **Step 6: Create a lambda function**
 
 1. Create a new lambda function in the AWS Management Console.
-2. Choose Python 3.12 as the runtime.
+2. Choose Python 3.11 as the runtime. 
+
+### **Step 7: Configure a layer for the lambda function**
+
+1. Create a new layer in the AWS Management Console.
+2. Choose Python 3.11 as the runtime.
+3. Since the *realestate_env* package exceeds the maximum size limit of 10MB, choose *Upload a file from Amazon S3* 
+4. Copy the S3 URL of the *realestate_env.zip* file from your S3 bucket.
+5. Create the layer. 
+6. Add the layer to the lambda function. 
+
+### **Step 8: Configure the lambda function** 
+
+1. In your lambda function code source section, choose *Upload from* and select the *lambda_package_new.zip* file from the cloned repository from your local machine. 
+2.  Configure the lambda function by adding the SCRAPING_TARGET, or upload your *config.py* file to the lambda function. 
+3. Set up a lambda function trigger using amazon event bridge or cloudwatch events. Since this is a real estate data project, we don't need to set up a trigger more frequent than once a day. An example of a cloudwatch event cron expression could be: *cron(0 8 * * ? *)* which triggers the lambda function every day at 8am. 
+4. Important Runtime setting: make sure to set the lambda handler to *lambda_function.lambda_handler* !
+
+### **Step 9: Test the lambda function**
+
+- Deploy the lambda function by clicking on the *Deploy* button in the AWS Management Console.  
+- Test the lambda function by running dynamodb_handler.py from the cloned repository. And you should see the test data ('2024-07-04', 500000, 1300, 2) being inserted into the dynamodb table. 
+
+## Okay, you have successfully set up the project!
+ Now you can start scraping the real estate data and storing it in the dynamodb table. 
+ Next project step will be to fetch the data from the dynamodb table, store it locally, and visualize it using a data visualization library like matplotlib or seaborn.

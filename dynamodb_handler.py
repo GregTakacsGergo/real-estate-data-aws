@@ -79,7 +79,7 @@ class ApartmentDataDatabase:
 def main():
     handler = ApartmentDataDatabase()
     handler.ensure_table_exists()
-
+    # test data insertion for testing the lambda function
     handler.insert_data_db('2024-07-04', 500000, 1300, 2)
     
     
